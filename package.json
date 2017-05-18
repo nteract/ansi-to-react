@@ -37,7 +37,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "anser": "^1.1.0",
-    "escape-carriage": "^1.0.1"
+    "escape-carriage": "^1.2.0"
   },
   "peerDependencies": {
     "react": "^15.0.0-0"
