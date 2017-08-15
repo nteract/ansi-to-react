@@ -1,21 +1,8 @@
 # ANSI to React
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/nteract/ansi-to-react.svg)](https://greenkeeper.io/)
+:warning:
 
-Convert ANSI Escape Codes to pretty text output for React.
+This repository is now in the nteract/nteract monorepo, under [packages/ansi-to-react](https://github.com/nteract/nteract/tree/master/packages/ansi-to-react). Same npm package, new location that's easier for us to maintain (you're welcome too!).
 
-```
-npm install --save ansi-to-react
-```
+:warning:
 
-## Usage
-
-```js
-const Ansi = require('ansi-to-react');
-
-...
-
-<Ansi>
-  {'\u001b[34mnode_modules\u001b[m\u001b[m'}
-</Ansi>
-```
