@@ -73,6 +73,20 @@ Will render
 | ansi-bright-cyan-fg    |
 | ansi-bright-white-fg   |
 
+## Development
+
+To develop on this project, fork and clone this repository on your local machine. Before making modifications, install the project's dependencies.
+
+```
+$ npm install
+```
+
+To run the test suite for this project, run:
+
+```
+$ npm test
+```
+
 ## Documentation
 
 We're working on adding more documentation for this component. Stay tuned by watching this repository!
