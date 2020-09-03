@@ -135,6 +135,34 @@ describe("Ansi", () => {
     );
   });
 
+  test("can linkify multiple links", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        { linkify: true },
+        "this is a link: www.google.com and this is a second link: www.microsoft.com"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("this is a link: www.google.com and this is a second link: www.microsoft.com");
+    expect(el.html()).toBe(
+      '<code><span>this is a link: <a href=\"http://www.google.com\" target=\"_blank\">www.google.com</a> and this is a second link: <a href=\"http://www.microsoft.com\" target=\"_blank\">www.microsoft.com</a></span></code>'
+    );
+  });
+
+  test("creates a minimal number of nodes when using linkify", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        { linkify: true },
+        "this is a link: www.google.com and this is text after"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("this is a link: www.google.com and this is text after");
+    expect(el.childAt(0).children()).toHaveLength(3);
+  });
+
   describe("useClasses options", () => {
     test("can add the font color class", () => {
       const el = shallow(
