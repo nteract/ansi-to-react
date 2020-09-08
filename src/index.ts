@@ -106,15 +106,16 @@ function convertBundleIntoReact(
   let index = 0;
   let match: RegExpExecArray | null;
   while ((match = linkRegex.exec(bundle.content)) !== null) {
-    const startIndex = match.index + match[1].length;
+    const [ , pre, url, post ] = match;
+
+    const startIndex = match.index + pre.length;
     if (startIndex > index) {
       content.push(bundle.content.substring(index, startIndex));
     }
 
-    const link = match[2];
     // Make sure the href we generate from the link is fully qualified. We assume http
     // if it starts with a www because many sites don't support https
-    const href = link.startsWith("www.") ? `http://${link}` : link;
+    const href = url.startsWith("www.") ? `http://${url}` : url;
     content.push(
       React.createElement(
         "a",
@@ -123,11 +124,11 @@ function convertBundleIntoReact(
           href,
           target: "_blank"
         },
-        `${link}`
+        `${url}`
       )
     );
 
-    const endIndex = linkRegex.lastIndex - match[3].length;
+    const endIndex = linkRegex.lastIndex - post.length;
     index = endIndex;
   }
 
