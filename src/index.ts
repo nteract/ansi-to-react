@@ -2,8 +2,6 @@ import Anser, { AnserJsonEntry } from "anser";
 import { escapeCarriageReturn } from "escape-carriage";
 import * as React from "react";
 
-const LINK_REGEX = /^(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})$/;
-
 /**
  * Converts ANSI strings into JSON output.
  * @name ansiToJSON
@@ -102,37 +100,42 @@ function convertBundleIntoReact(
     );
   }
 
-  const content = bundle.content
-    .split(/(\s+)/)
-    .reduce((words: React.ReactNode[], word: string, index: number) => {
-      // If this is a separator, re-add the space removed from split.
-      if (index % 2 === 1) {
-        words.push(word);
-        return words;
-      }
+  const content: React.ReactNode[] = [];
+  const linkRegex = /(\s+|^)(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})(\s+|$)/g;
 
-      // If  this isn't a link, just return the word as-is.
-      if (!LINK_REGEX.test(word)) {
-        words.push(word);
-        return words;
-      }
+  let index = 0;
+  let match: RegExpExecArray | null;
+  while ((match = linkRegex.exec(bundle.content)) !== null) {
+    const [ , pre, url, post ] = match;
 
-      // Make sure the href we generate from the link is fully qualified. We assume http
-      // if it starts with a www because many sites don't support https
-      const href = word.startsWith("www.") ? `http://${word}` : word;
-      words.push(
-        React.createElement(
-          "a",
-          {
-            key: index,
-            href,
-            target: "_blank"
-          },
-          `${word}`
-        )
-      );
-      return words;
-    }, [] as React.ReactNode[]);
+    const startIndex = match.index + pre.length;
+    if (startIndex > index) {
+      content.push(bundle.content.substring(index, startIndex));
+    }
+
+    // Make sure the href we generate from the link is fully qualified. We assume http
+    // if it starts with a www because many sites don't support https
+    const href = url.startsWith("www.") ? `http://${url}` : url;
+    content.push(
+      React.createElement(
+        "a",
+        {
+          key: index,
+          href,
+          target: "_blank"
+        },
+        `${url}`
+      )
+    );
+
+    const endIndex = linkRegex.lastIndex - post.length;
+    index = endIndex;
+  }
+
+  if (index < bundle.content.length) {
+    content.push(bundle.content.substring(index));
+  }
+
   return React.createElement("span", { style, key, className }, content);
 }
 
