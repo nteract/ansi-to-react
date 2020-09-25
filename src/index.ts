@@ -101,12 +101,12 @@ function convertBundleIntoReact(
   }
 
   const content: React.ReactNode[] = [];
-  const linkRegex = /(\s+|^)(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})(\s+|$)/g;
+  const linkRegex = /(\s+|^)(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/g;
 
   let index = 0;
   let match: RegExpExecArray | null;
   while ((match = linkRegex.exec(bundle.content)) !== null) {
-    const [ , pre, url, post ] = match;
+    const [ , pre, url ] = match;
 
     const startIndex = match.index + pre.length;
     if (startIndex > index) {
@@ -128,8 +128,7 @@ function convertBundleIntoReact(
       )
     );
 
-    const endIndex = linkRegex.lastIndex - post.length;
-    index = endIndex;
+    index = linkRegex.lastIndex;
   }
 
   if (index < bundle.content.length) {
