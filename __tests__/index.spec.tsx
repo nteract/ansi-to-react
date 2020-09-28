@@ -178,6 +178,21 @@ describe("Ansi", () => {
     );
   });
 
+  test("can handle URLs inside query parameters", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        { linkify: true },
+        "www.google.com/?q=https://www.google.com"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("www.google.com/?q=https://www.google.com");
+    expect(el.html()).toBe(
+      '<code><span><a href="http://www.google.com/?q=https://www.google.com" target="_blank">www.google.com/?q=https://www.google.com</a></span></code>'
+    );
+  });
+
   describe("useClasses options", () => {
     test("can add the font color class", () => {
       const el = shallow(
