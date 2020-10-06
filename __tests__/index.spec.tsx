@@ -163,6 +163,36 @@ describe("Ansi", () => {
     expect(el.childAt(0).children()).toHaveLength(3);
   });
 
+  test("can linkify multiple links one after another", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        { linkify: true },
+        "www.google.com www.google.com www.google.com"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("www.google.com www.google.com www.google.com");
+    expect(el.html()).toBe(
+      '<code><span><a href="http://www.google.com" target="_blank">www.google.com</a> <a href="http://www.google.com" target="_blank">www.google.com</a> <a href="http://www.google.com" target="_blank">www.google.com</a></span></code>'
+    );
+  });
+
+  test("can handle URLs inside query parameters", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        { linkify: true },
+        "www.google.com/?q=https://www.google.com"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("www.google.com/?q=https://www.google.com");
+    expect(el.html()).toBe(
+      '<code><span><a href="http://www.google.com/?q=https://www.google.com" target="_blank">www.google.com/?q=https://www.google.com</a></span></code>'
+    );
+  });
+
   describe("useClasses options", () => {
     test("can add the font color class", () => {
       const el = shallow(
