@@ -1,13 +1,14 @@
 {
   "name": "ansi-to-react",
-  "version": "6.0.8",
+  "version": "0.0.0-development",
   "description": "ANSI to React Elements",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "nteractDesktop": "src/index.ts",
   "scripts": {
     "build": "tsc -b",
-    "test": "jest"
+    "test": "jest",
+    "semantic-release": "semantic-release"
   },
   "repository": "https://github.com/nteract/ansi-to-react",
   "keywords": [
@@ -37,6 +38,7 @@
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "ts-jest": "^25.2.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "semantic-release": "^17.2.1"
   }
 }
