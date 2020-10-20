@@ -193,6 +193,21 @@ describe("Ansi", () => {
     );
   });
 
+  test("can spanify", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        { spanify: true },
+        "spanify works"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("spanify works");
+    expect(el.html()).toBe(
+      '<span>spanify works</span>'
+    );
+  });
+
   describe("useClasses options", () => {
     test("can add the font color class", () => {
       const el = shallow(

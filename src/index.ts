@@ -143,13 +143,16 @@ declare interface Props {
   linkify?: boolean;
   className?: string;
   useClasses?: boolean;
+  spanify?: boolean;
 }
 
 export default function Ansi(props: Props): JSX.Element {
-  const { className, useClasses, children, linkify } = props;
+  const { className, useClasses, children, linkify, spanify } = props;
+  const elementType = spanify ? React.Fragment : "code";
+  const elementProps = spanify ? null : { className };
   return React.createElement(
-    "code",
-    { className },
+    elementType,
+    elementProps,
     ansiToJSON(children ?? "", useClasses ?? false).map(
       convertBundleIntoReact.bind(null, linkify ?? false, useClasses ?? false)
     )
