@@ -193,21 +193,6 @@ describe("Ansi", () => {
     );
   });
 
-  test("can spanify", () => {
-    const el = shallow(
-      React.createElement(
-        Ansi,
-        { spanify: true },
-        "spanify works"
-      )
-    );
-    expect(el).not.toBeNull();
-    expect(el.text()).toBe("spanify works");
-    expect(el.html()).toBe(
-      '<span>spanify works</span>'
-    );
-  });
-
   describe("useClasses options", () => {
     test("can add the font color class", () => {
       const el = shallow(
@@ -281,6 +266,41 @@ describe("Ansi", () => {
       expect(el.text()).toBe("this is a link: https://nteract.io/");
       expect(el.html()).toBe(
         '<code><span class="ansi-green-fg">this is a link: <a href="https://nteract.io/" target="_blank">https://nteract.io/</a></span></code>'
+      );
+    });
+  });
+
+  describe("as span", () => {
+    test("can return hello world as a span element", () => {
+      const el = shallow(
+        React.createElement(Ansi, { as: "span" }, "hello world")
+      );
+      expect(el).not.toBeNull();
+      expect(el.text()).toBe("hello world");
+      expect(el.html()).toBe(
+        '<span>hello world</span>'
+      );
+    });
+
+    test("can return a link as a span element", () => {
+      const el = shallow(
+        React.createElement(Ansi, { as: "span", linkify: true }, "https://nteract.io/")
+      );
+      expect(el).not.toBeNull();
+      expect(el.text()).toBe("https://nteract.io/");
+      expect(el.html()).toBe(
+        '<span><a href="https://nteract.io/" target="_blank">https://nteract.io/</a></span>'
+      );
+    });
+
+    test("can return nested span elements with color", () => {
+      const el = shallow(
+        React.createElement(Ansi, { as: "span" }, `${GREEN_FG}hello ${YELLOW_BG}world`)
+      );
+      expect(el).not.toBeNull();
+      expect(el.text()).toBe("hello world");
+      expect(el.html()).toBe(
+        '<span style="color:rgb(0, 187, 0)">hello </span><span style="background-color:rgb(187, 187, 0);color:rgb(0, 187, 0)">world</span>'
       );
     });
   });

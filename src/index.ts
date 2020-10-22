@@ -143,13 +143,13 @@ declare interface Props {
   linkify?: boolean;
   className?: string;
   useClasses?: boolean;
-  spanify?: boolean;
+  as?: string;
 }
 
 export default function Ansi(props: Props): JSX.Element {
-  const { className, useClasses, children, linkify, spanify } = props;
-  const elementType = spanify ? React.Fragment : "code";
-  const elementProps = spanify ? null : { className };
+  const { className, useClasses, children, linkify, as } = props;
+  const elementType = ( as === "span" ) ? React.Fragment : "code";
+  const elementProps = ( as === "span" ) ? null : { className };
   return React.createElement(
     elementType,
     elementProps,
