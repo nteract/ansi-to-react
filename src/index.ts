@@ -13,10 +13,11 @@ import * as React from "react";
  */
 function ansiToJSON(
   input: string,
-  use_classes: boolean = false
+  use_classes: boolean = false,
+  anser: Anser
 ): AnserJsonEntry[] {
   input = escapeCarriageReturn(input);
-  return Anser.ansiToJson(input, {
+  return anser.ansiToJson(input, {
     json: true,
     remove_empty: true,
     use_classes
@@ -144,16 +145,17 @@ declare interface Props {
   className?: string;
   useClasses?: boolean;
   as?: string;
+  anser?: Anser;
 }
 
 export default function Ansi(props: Props): JSX.Element {
-  const { className, useClasses, children, linkify, as } = props;
+  const { className, useClasses, children, linkify, as, anser } = props;
   const elementType = ( as === "span" ) ? React.Fragment : "code";
   const elementProps = ( as === "span" ) ? null : { className };
   return React.createElement(
     elementType,
     elementProps,
-    ansiToJSON(children ?? "", useClasses ?? false).map(
+    ansiToJSON(children ?? "", useClasses ?? false, anser ?? new Anser()).map(
       convertBundleIntoReact.bind(null, linkify ?? false, useClasses ?? false)
     )
   );
