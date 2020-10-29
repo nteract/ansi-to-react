@@ -1,12 +1,14 @@
 import { shallow } from "enzyme";
 import React from "react";
 
+import Anser from "anser";
 import Ansi from "../src/index";
 
 const GREEN_FG = "\u001b[32m";
 const YELLOW_BG = "\u001b[43m";
 const BOLD = "\u001b[1m";
 const RESET = "\u001b[0;m";
+const NO_OP = "\u001b[99m";
 
 describe("Ansi", () => {
   test("hello world", () => {
@@ -267,6 +269,85 @@ describe("Ansi", () => {
       expect(el.html()).toBe(
         '<code><span class="ansi-green-fg">this is a link: <a href="https://nteract.io/" target="_blank">https://nteract.io/</a></span></code>'
       );
+    });
+  });
+
+  describe("as span", () => {
+    test("can return hello world as a span element", () => {
+      const el = shallow(
+        React.createElement(Ansi, { as: "span" }, "hello world")
+      );
+      expect(el).not.toBeNull();
+      expect(el.text()).toBe("hello world");
+      expect(el.html()).toBe(
+        '<span>hello world</span>'
+      );
+    });
+
+    test("can return a link as a span element", () => {
+      const el = shallow(
+        React.createElement(Ansi, { as: "span", linkify: true }, "https://nteract.io/")
+      );
+      expect(el).not.toBeNull();
+      expect(el.text()).toBe("https://nteract.io/");
+      expect(el.html()).toBe(
+        '<span><a href="https://nteract.io/" target="_blank">https://nteract.io/</a></span>'
+      );
+    });
+
+    test("can return nested span elements with color", () => {
+      const el = shallow(
+        React.createElement(Ansi, { as: "span" }, `${GREEN_FG}hello ${YELLOW_BG}world`)
+      );
+      expect(el).not.toBeNull();
+      expect(el.text()).toBe("hello world");
+      expect(el.html()).toBe(
+        '<span style="color:rgb(0, 187, 0)">hello </span><span style="background-color:rgb(187, 187, 0);color:rgb(0, 187, 0)">world</span>'
+      );
+    });
+  });
+
+  describe("data in chunks", () => {
+    describe("without anser prop", () => {
+      test("doesn't carry colors over", () => {
+        const dataInChunks = [`${GREEN_FG}hello `, `${YELLOW_BG}world`];
+        let el = "";
+        dataInChunks.map((spandata) =>
+          el += (shallow(React.createElement(Ansi, { as: "span" }, spandata)).html())
+        );
+        expect(el).not.toBeNull();
+        expect(el).toBe(
+          '<span style="color:rgb(0, 187, 0)">hello </span><span style="background-color:rgb(187, 187, 0)">world</span>'
+        );
+      });
+    });
+
+    describe("with anser prop", () => {
+      test("can carry colors over", () => {
+        const anser = new Anser();
+        const dataInChunks = [`${GREEN_FG}hello `, `${YELLOW_BG}world`];
+        let el = "";
+        dataInChunks.map((spandata) =>
+          el += (shallow(React.createElement(Ansi, { as: "span", anser: anser }, spandata)).html())
+        );
+        expect(el).not.toBeNull();
+        expect(el).toBe(
+          '<span style="color:rgb(0, 187, 0)">hello </span><span style="background-color:rgb(187, 187, 0);color:rgb(0, 187, 0)">world</span>'
+        );
+      });
+  
+      test("can carry colors over using a no-op option for chunks without code", () => {
+        const anser = new Anser();
+        const dataInChunks = [`${GREEN_FG}hello `, `${NO_OP}world`];
+        let el = "";
+        dataInChunks.map((spandata) =>
+          el += (shallow(React.createElement(Ansi, { as: "span", anser: anser }, spandata)).html())
+        );
+        expect(el).not.toBeNull();
+        expect(el).toBe(
+          '<span style="color:rgb(0, 187, 0)">hello </span><span style="color:rgb(0, 187, 0)">world</span>'
+        );
+      });
     });
   });
 });
