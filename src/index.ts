@@ -15,11 +15,11 @@ function ansiToJSON(
   input: string,
   use_classes: boolean = false
 ): AnserJsonEntry[] {
-  input = escapeCarriageReturn(input);
+  input = escapeCarriageReturn(fixBackspace(input));
   return Anser.ansiToJson(input, {
     json: true,
     remove_empty: true,
-    use_classes
+    use_classes,
   });
 }
 
@@ -106,7 +106,7 @@ function convertBundleIntoReact(
   let index = 0;
   let match: RegExpExecArray | null;
   while ((match = linkRegex.exec(bundle.content)) !== null) {
-    const [ , pre, url ] = match;
+    const [, pre, url] = match;
 
     const startIndex = match.index + pre.length;
     if (startIndex > index) {
@@ -122,7 +122,7 @@ function convertBundleIntoReact(
         {
           key: index,
           href,
-          target: "_blank"
+          target: "_blank",
         },
         `${url}`
       )
@@ -154,4 +154,19 @@ export default function Ansi(props: Props): JSX.Element {
       convertBundleIntoReact.bind(null, linkify ?? false, useClasses ?? false)
     )
   );
+}
+
+// This is copied from the Jupyter Classic source code
+// notebook/static/base/js/utils.js to handle \b in a way
+// that is **compatible with Jupyter classic**.   One can
+// argue that this behavior is questionable:
+//   https://stackoverflow.com/questions/55440152/multiple-b-doesnt-work-as-expected-in-jupyter#
+function fixBackspace(txt: string) {
+  let tmp = txt;
+  do {
+    txt = tmp;
+    // Cancel out anything-but-newline followed by backspace
+    tmp = txt.replace(/[^\n]\x08/gm, "");
+  } while (tmp.length < txt.length);
+  return txt;
 }

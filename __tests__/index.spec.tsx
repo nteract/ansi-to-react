@@ -64,6 +64,43 @@ describe("Ansi", () => {
     expect(el.text()).toBe("that sentence\nwill make you pause");
   });
 
+  test("can handle backspace symbol", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        null,
+        "01hello\b goodbye"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("01hell goodbye");
+  });
+
+  // see https://stackoverflow.com/questions/55440152/multiple-b-doesnt-work-as-expected-in-jupyter#
+  test("handles backspace symbol in same funny way as Jupyter Classic -- 1/2", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        null,
+        "02hello\b\b goodbye"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("02hel goodbye");
+  });
+
+  test("handles backspace symbol in same funny way as Jupyter Classic -- 2/2", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        null,
+        "03hello\b\b\b goodbye"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("03hell goodbye");
+  });
+
   test("can linkify", () => {
     const el = shallow(
       React.createElement(
