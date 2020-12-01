@@ -28,7 +28,7 @@ export function () => {
 };
 ```
 
-Will render
+Will render:
 
 ```javascript
 <code>
