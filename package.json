@@ -10,6 +10,7 @@
     "test": "jest",
     "semantic-release": "semantic-release"
   },
+  "files": ["lib"],
   "repository": "https://github.com/nteract/ansi-to-react",
   "keywords": [
     "ansi",
