@@ -56,6 +56,15 @@ interface Colors {
   backgroundColor?: string;
 }
 
+interface Styles extends Colors {
+  fontWeight?: string;
+  opacity?: string;
+  fontStyle?: string;
+  visibility?: string;
+  textDecoration?: string;
+}
+
+
 /**
  * Create the style attribute.
  * @name createStyle
@@ -64,14 +73,38 @@ interface Colors {
  * @return {Object} returns the style object
  */
 function createStyle(bundle: AnserJsonEntry): Colors {
-  const style: Colors = {};
+  const style: Styles = {};
   if (bundle.bg) {
     style.backgroundColor = `rgb(${bundle.bg})`;
   }
   if (bundle.fg) {
     style.color = `rgb(${bundle.fg})`;
   }
-
+  switch (bundle.decoration) {
+    case 'bold':
+        style.fontWeight = 'bold';
+        break;
+    case 'dim':
+        style.opacity = '0.5';
+        break;
+    case 'italic':
+        style.fontStyle = 'italic';
+        break;
+    case 'hidden':
+        style.visibility = 'hidden';
+        break;
+    case 'strikethrough':
+        style.textDecoration = 'line-through';
+        break;
+    case 'underline':
+        style.textDecoration = 'underline';
+        break;
+    case 'blink':
+        style.textDecoration = 'blink';
+        break;
+    default:
+        break;
+  }
   return style;
 }
 
