@@ -73,6 +73,24 @@ Will render
 | ansi-bright-cyan-fg    |
 | ansi-bright-white-fg   |
 
+#### Dark/light modes
+
+Ansi output does not normally dictates the background and text color of non highlighted text. Ansi colors render well on both dark and light backgrounds.
+
+For dark/light modes, simply set the `background-color` and `color` style properties of the container:
+
+```javascript
+import Ansi from "ansi-to-react";
+
+export function AnsiOutput() {
+  return (
+    <div style={{ backgroundColor: 'black', color: 'white' }}>
+      <Ansi>{'\u001b[34mhello world'}</Ansi>
+    </div>
+  );
+}
+```
+
 ## Development
 
 To develop on this project, fork and clone this repository on your local machine. Before making modifications, install the project's dependencies.
