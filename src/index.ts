@@ -51,20 +51,6 @@ function createClass(bundle: AnserJsonEntry): string | null {
   return classNames;
 }
 
-interface Colors {
-  color?: string;
-  backgroundColor?: string;
-}
-
-interface Styles extends Colors {
-  fontWeight?: string;
-  opacity?: string;
-  fontStyle?: string;
-  visibility?: string;
-  textDecoration?: string;
-}
-
-
 /**
  * Create the style attribute.
  * @name createStyle
@@ -72,8 +58,8 @@ interface Styles extends Colors {
  * @param {AnserJsonEntry} bundle
  * @return {Object} returns the style object
  */
-function createStyle(bundle: AnserJsonEntry): Colors {
-  const style: Styles = {};
+function createStyle(bundle: AnserJsonEntry): React.CSSProperties {
+  const style: React.CSSProperties = {};
   if (bundle.bg) {
     style.backgroundColor = `rgb(${bundle.bg})`;
   }

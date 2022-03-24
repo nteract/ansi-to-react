@@ -305,5 +305,20 @@ describe("Ansi", () => {
         '<code><span class="ansi-green-fg">this is a link: <a href="https://nteract.io/" target="_blank">https://nteract.io/</a></span></code>'
       );
     });
+
+    test("can add text decoration styles", () => {
+      const el = shallow(
+        React.createElement(
+          Ansi,
+          {},
+          `hello ${GREEN_FG}${BOLD}world${RESET}!`
+        )
+      );
+      expect(el).not.toBeNull();
+      expect(el.text()).toBe("hello world!");
+      expect(el.html()).toBe(
+        '<code><span>hello </span><span style="color:rgb(0, 187, 0);font-weight:bold">world</span><span>!</span></code>'
+      );
+    });
   });
 });
