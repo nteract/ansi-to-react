@@ -1,5 +1,6 @@
 import Anser, { AnserJsonEntry } from "anser";
 import { escapeCarriageReturn } from "escape-carriage";
+import linkifyit from "linkify-it";
 import * as React from "react";
 
 /**
@@ -101,9 +102,8 @@ function createStyle(bundle: AnserJsonEntry): React.CSSProperties {
  * @param bundle Anser output.
  * @param key
  */
-
 function convertBundleIntoReact(
-  linkify: boolean,
+  linkify: boolean | "fuzzy",
   useClasses: boolean,
   bundle: AnserJsonEntry,
   key: number
@@ -119,6 +119,19 @@ function convertBundleIntoReact(
     );
   }
 
+  if (linkify === "fuzzy") {
+    return linkWithLinkify(bundle, key, style, className);
+  }
+
+  return linkWithClassicMode(bundle, key, style, className);
+}
+
+function linkWithClassicMode(
+  bundle: AnserJsonEntry,
+  key: number,
+  style: React.CSSProperties | null,
+  className: string | null
+) {
   const content: React.ReactNode[] = [];
   const linkRegex = /(\s|^)(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/g;
 
@@ -157,9 +170,70 @@ function convertBundleIntoReact(
   return React.createElement("span", { style, key, className }, content);
 }
 
+function linkWithLinkify(
+  bundle: AnserJsonEntry,
+  key: number,
+  style: React.CSSProperties | null,
+  className: string | null
+): JSX.Element {
+  const linker = linkifyit({ fuzzyEmail: false }).tlds(["io"], true);
+
+  if (!linker.pretest(bundle.content)) {
+    return React.createElement(
+      "span",
+      { style, key, className },
+      bundle.content
+    );
+  }
+
+  const matches = linker.match(bundle.content);
+
+  if (!matches) {
+    return React.createElement(
+      "span",
+      { style, key, className },
+      bundle.content
+    );
+  }
+
+  const content: React.ReactNode[] = [
+    bundle.content.substring(0, matches[0]?.index),
+  ];
+
+  matches.forEach((match, i) => {
+    content.push(
+      React.createElement(
+        "a",
+        {
+          href: match.url,
+          target: "_blank",
+          key: i,
+        },
+        bundle.content.substring(match.index, match.lastIndex)
+      )
+    );
+
+    if (matches[i + 1]) {
+      content.push(
+        bundle.content.substring(matches[i].lastIndex, matches[i + 1]?.index)
+      );
+    }
+  });
+
+  if (matches[matches.length - 1].lastIndex !== bundle.content.length) {
+    content.push(
+      bundle.content.substring(
+        matches[matches.length - 1].lastIndex,
+        bundle.content.length
+      )
+    );
+  }
+  return React.createElement("span", { style, key, className }, content);
+}
+
 declare interface Props {
   children?: string;
-  linkify?: boolean;
+  linkify?: boolean | "fuzzy";
   className?: string;
   useClasses?: boolean;
 }
