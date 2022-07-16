@@ -5,7 +5,7 @@
     "esModuleInterop": true,
     "composite": true,
     "lib": ["esnext", "dom"],
-    "target": "es2017",
+    "target": "ES5",
     "module": "commonjs",
     "moduleResolution": "node",
     "skipLibCheck": true,
