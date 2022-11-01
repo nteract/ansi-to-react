@@ -37,7 +37,7 @@
     "conventional-changelog-conventionalcommits": "^4.5.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
-    "jest": "^25.1.0",
+    "jest": "^29.2.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "semantic-release": "^17.2.1",
