@@ -230,6 +230,21 @@ describe("Ansi", () => {
     );
   });
 
+  test("can linkify fuzzy links", () => {
+    const el = shallow(
+      React.createElement(
+        Ansi,
+        { linkify: "fuzzy" },
+        "this is a fuzzy link: example.com"
+      )
+    );
+    expect(el).not.toBeNull();
+    expect(el.text()).toBe("this is a fuzzy link: example.com");
+    expect(el.html()).toBe(
+      '<code><span>this is a fuzzy link: <a href="http://example.com" target="_blank">example.com</a></span></code>'
+    );
+  });
+
   describe("useClasses options", () => {
     test("can add the font color class", () => {
       const el = shallow(
