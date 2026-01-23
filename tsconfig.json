@@ -4,7 +4,10 @@
     "declaration": true,
     "esModuleInterop": true,
     "composite": true,
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "target": "es2017",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -16,6 +19,8 @@
     "preserveWatchOutput": true,
     "jsx": "react"
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "references": []
 }

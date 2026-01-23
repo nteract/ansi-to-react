@@ -13,7 +13,7 @@ import * as React from "react";
  */
 function ansiToJSON(
   input: string,
-  use_classes: boolean = false
+  use_classes: boolean = false,
 ): AnserJsonEntry[] {
   input = escapeCarriageReturn(fixBackspace(input));
   return Anser.ansiToJson(input, {
@@ -67,29 +67,29 @@ function createStyle(bundle: AnserJsonEntry): React.CSSProperties {
     style.color = `rgb(${bundle.fg})`;
   }
   switch (bundle.decoration) {
-    case 'bold':
-        style.fontWeight = 'bold';
-        break;
-    case 'dim':
-        style.opacity = '0.5';
-        break;
-    case 'italic':
-        style.fontStyle = 'italic';
-        break;
-    case 'hidden':
-        style.visibility = 'hidden';
-        break;
-    case 'strikethrough':
-        style.textDecoration = 'line-through';
-        break;
-    case 'underline':
-        style.textDecoration = 'underline';
-        break;
-    case 'blink':
-        style.textDecoration = 'blink';
-        break;
+    case "bold":
+      style.fontWeight = "bold";
+      break;
+    case "dim":
+      style.opacity = "0.5";
+      break;
+    case "italic":
+      style.fontStyle = "italic";
+      break;
+    case "hidden":
+      style.visibility = "hidden";
+      break;
+    case "strikethrough":
+      style.textDecoration = "line-through";
+      break;
+    case "underline":
+      style.textDecoration = "underline";
+      break;
+    case "blink":
+      style.textDecoration = "blink";
+      break;
     default:
-        break;
+      break;
   }
   return style;
 }
@@ -106,8 +106,8 @@ function convertBundleIntoReact(
   linkify: boolean,
   useClasses: boolean,
   bundle: AnserJsonEntry,
-  key: number
-): JSX.Element {
+  key: number,
+): React.ReactElement {
   const style = useClasses ? null : createStyle(bundle);
   const className = useClasses ? createClass(bundle) : null;
 
@@ -115,12 +115,13 @@ function convertBundleIntoReact(
     return React.createElement(
       "span",
       { style, key, className },
-      bundle.content
+      bundle.content,
     );
   }
 
   const content: React.ReactNode[] = [];
-  const linkRegex = /(\s|^)(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/g;
+  const linkRegex =
+    /(\s|^)(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/g;
 
   let index = 0;
   let match: RegExpExecArray | null;
@@ -143,8 +144,8 @@ function convertBundleIntoReact(
           href,
           target: "_blank",
         },
-        `${url}`
-      )
+        `${url}`,
+      ),
     );
 
     index = linkRegex.lastIndex;
@@ -164,14 +165,14 @@ declare interface Props {
   useClasses?: boolean;
 }
 
-export default function Ansi(props: Props): JSX.Element {
+export default function Ansi(props: Props): React.ReactElement {
   const { className, useClasses, children, linkify } = props;
   return React.createElement(
     "code",
     { className },
     ansiToJSON(children ?? "", useClasses ?? false).map(
-      convertBundleIntoReact.bind(null, linkify ?? false, useClasses ?? false)
-    )
+      convertBundleIntoReact.bind(null, linkify ?? false, useClasses ?? false),
+    ),
   );
 }
 
