@@ -5,11 +5,7 @@ This package convert ANSI escape codes to formatted text output for React.
 ## Installation
 
 ```
-$ yarn add ansi-to-react
-```
-
-```
-$ npm install --save ansi-to-react
+$ pnpm add ansi-to-react
 ```
 
 ## Usage
@@ -78,13 +74,13 @@ Will render
 To develop on this project, fork and clone this repository on your local machine. Before making modifications, install the project's dependencies.
 
 ```
-$ npm install
+$ pnpm install
 ```
 
 To run the test suite for this project, run:
 
 ```
-$ npm test
+$ pnpm test
 ```
 
 ## Documentation
