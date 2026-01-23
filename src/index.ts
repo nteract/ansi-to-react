@@ -176,7 +176,7 @@ function linkWithLinkify(
   key: number,
   style: React.CSSProperties | null,
   className: string | null
-): JSX.Element {
+): React.ReactElement {
   const linker = linkifyit({ fuzzyEmail: false }).tlds(["io"], true);
 
   if (!linker.pretest(bundle.content)) {
