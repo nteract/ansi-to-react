@@ -37,4 +37,6 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: NODE_AUTH_TOKEN="" pnpm exec semantic-release
+			 NODE_AUTH_TOKEN: ""
+			 NPM_AUTH_TOKEN: ""
+        run: pnpm exec semantic-release
