@@ -14,7 +14,10 @@
   "files": [
     "lib"
   ],
-  "repository": "https://github.com/nteract/ansi-to-react",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nteract/ansi-to-react.git"
+  },
   "keywords": [
     "ansi",
     "react"
